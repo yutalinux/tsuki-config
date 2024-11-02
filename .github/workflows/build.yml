@@ -15,7 +15,7 @@ jobs:
       - name: Set Nopasswd Sudo
         run: echo "ALL ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
       - name: Install Packages
-        run: pacman -Syyu --noconfirm sudo gupg
+        run: pacman -Syyu --noconfirm sudo gnupg
       - name: Create builder user
         run: |
           sudo useradd -m builder
