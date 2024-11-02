@@ -13,7 +13,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
+      - name: Install Packages
+        run: pacman -Syyu sudo
       - name: Build Packages
         run: sudo ./build.sh
       - name: GitHub Pages
