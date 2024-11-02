@@ -8,12 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: archlinux:base
+      image: archlinux:base-devel
       options: --privileged
     steps:
       - uses: actions/checkout@v4
       - name: Install Packages
-        run: pacman -Syyu --noconfirm sudo base-devel
+        run: pacman -Syyu --noconfirm sudo
       - name: Create non-root user
         run: |
           sudo useradd -m nonroot
