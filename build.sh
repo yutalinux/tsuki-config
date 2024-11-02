@@ -8,7 +8,7 @@ for dir in */; do
 
     if [ -f "PKGBUILD" ]; then
       echo "Building package in $dir"
-      makepkg -sf
+      makepkg -sf --syncdeps
 
       if [ $? -ne 0 ]; then
         echo "Error building package in $dir"
