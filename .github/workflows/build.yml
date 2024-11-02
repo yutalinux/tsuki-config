@@ -12,6 +12,8 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: set Nopasswd
+        run: echo "ALL ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
       - name: Install Packages
         run: pacman -Syyu --noconfirm sudo
       - name: Create builder user
