@@ -15,13 +15,19 @@ jobs:
       - name: Set Nopasswd Sudo
         run: echo "ALL ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
       - name: Install Packages
-        run: pacman -Syyu --noconfirm sudo
+        run: pacman -Syyu --noconfirm sudo gupg
       - name: Create builder user
         run: |
           sudo useradd -m builder
           sudo chown -R builder:builder $GITHUB_WORKSPACE
       - name: Build Packages
         run: su builder -c ./build.sh
+      - name: Import GPG key
+        run: |
+          echo "${{ secrets.GPG_SECRET_KEY }}" | gpg --batch --import
+      - name: Sign Packages
+        run: |
+          echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --detach-sign --pinentry-mode loopback --passphrase-fd 0 --sign dist/*.pkg.tar.zst
       - name: Upload static files
         id: deployment
         uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
