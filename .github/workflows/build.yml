@@ -9,8 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: archlinux:base
-      options: --privileged
-
+      options: --privileged --user 1001
     steps:
       - uses: actions/checkout@v4
       - name: Install Packages
