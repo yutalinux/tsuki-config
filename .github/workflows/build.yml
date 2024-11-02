@@ -16,7 +16,7 @@ jobs:
       - name: Install Packages
         run: pacman -Syyu --noconfirm sudo base-devel
       - name: Build Packages
-        run: sudo ./build.sh
+        run: ./build.sh
       - name: GitHub Pages
         run: |
           mkdir -p public
