@@ -24,3 +24,9 @@ for dir in */; do
 done
 
 echo "All packages processed"
+
+cd ..
+
+mkdir -p dist
+find packages -name "*.pkg.tar.zst" -exec cp {} dist/ \;
+repo-add dist/custom.db.tar.gz dist/*.pkg.tar.zst

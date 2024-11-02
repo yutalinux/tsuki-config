@@ -12,7 +12,7 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
-      - name: set Nopasswd
+      - name: Set Nopasswd Sudo
         run: echo "ALL ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
       - name: Install Packages
         run: pacman -Syyu --noconfirm sudo
@@ -22,11 +22,6 @@ jobs:
           sudo chown -R builder:builder $GITHUB_WORKSPACE
       - name: Build Packages
         run: su builder -c ./build.sh
-      - name: GitHub Pages
-        run: |
-          mkdir -p public
-          find packages -name "*.pkg.tar.zst" -exec cp {} public/ \;
-          repo-add public/custom.db.tar.gz public/*.pkg.tar.zst
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
