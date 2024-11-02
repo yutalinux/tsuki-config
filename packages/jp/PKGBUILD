@@ -1,0 +1,16 @@
+pkgname=tsuki-jp
+pkgver=1.0
+pkgrel=1
+pkgdesc=""
+arch=('x86_64')
+license=('MIT')
+depends=('base')
+
+package() {
+  install -Dm644 "$srcdir/myconfig.conf" "$pkgdir/etc/myconfig.conf"
+
+  echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen
+  locale-gen
+
+  reflector --save /etc/pacman.d/mirrorlist --country Japan --protocol https --latest 5
+}
