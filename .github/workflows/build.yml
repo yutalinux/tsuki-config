@@ -14,8 +14,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Packages
         run: pacman -Syyu --noconfirm sudo base-devel
+      - name: Create non-root user
+        run: |
+          sudo useradd -m nonroot
+          sudo chown -R nonroot:nonroot $GITHUB_WORKSPACE
       - name: Build Packages
-        run: ./build.sh
+        run: sudo -u nonroot ./build.sh
       - name: GitHub Pages
         run: |
           mkdir -p public
