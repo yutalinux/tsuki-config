@@ -31,7 +31,7 @@ jobs:
       - name: Create Repo
         run: |
           echo "リポジトリを作成しています"
-          repo-add dist/tsuki.db.tar.gz --sign dist/*.pkg.tar.zst.sig || { echo "リポジトリ作成に失敗しました"; exit 1; }
+          repo-add dist/tsuki.db.tar.gz --sign dist/*.pkg.tar.zst || { echo "リポジトリ作成に失敗しました"; exit 1; }
       - name: Upload static files
         id: deployment
         uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
