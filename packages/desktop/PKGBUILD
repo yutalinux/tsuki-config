@@ -4,8 +4,11 @@ pkgrel=1
 pkgdesc=""
 arch=('x86_64')
 license=('MIT')
-depends=('base')
+depends=('base' 'xorg-server')
 
 package() {
-  echo
+  install -dm755 "$pkgdir/etc"
+  install -dm644 "$pkgdir/usr"
+  cp -r "$srcdir/etc" "$pkgdir/"
+  cp -r "$srcdir/usr" "$pkgdir/"
 }

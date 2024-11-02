@@ -4,7 +4,7 @@ pkgrel=1
 pkgdesc=""
 arch=('x86_64')
 license=('MIT')
-depends=('base')
+depends=('base' 'linux' 'grub' 'efibootmgr' 'sudo' 'networkmanager' 'dhcpcd')
 
 package() {
   echo
