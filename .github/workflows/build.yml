@@ -21,13 +21,17 @@ jobs:
           sudo useradd -m builder
           sudo chown -R builder:builder $GITHUB_WORKSPACE
       - name: Build Packages
-        run: su builder -c "./build.sh build"
+        run: |
+          su builder -c "./build.sh clean"
+          su builder -c "./build.sh build"
       - name: Import GPG key
         run: |
           echo "${{ secrets.GPG_SECRET_KEY }}" | gpg --batch --import
       - name: Sign Packages
         run: |
-          echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --detach-sign --pinentry-mode loopback --passphrase-fd 0 --sign dist/*.pkg.tar.zst
+          for file in dist/*.pkg.tar.zst; do
+            echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --detach-sign --pinentry-mode loopback --passphrase-fd 0 "$file"
+          done
       - name: Create Repo
         run: |
           echo "リポジトリを作成しています"
