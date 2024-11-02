@@ -21,7 +21,7 @@ jobs:
           sudo useradd -m builder
           sudo chown -R builder:builder $GITHUB_WORKSPACE
       - name: Build Packages
-        run: su builder -c ./build.sh
+        run: su builder -c ./build.sh build
       - name: Import GPG key
         run: |
           echo "${{ secrets.GPG_SECRET_KEY }}" | gpg --batch --import
