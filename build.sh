@@ -29,4 +29,4 @@ cd ..
 
 mkdir -p dist
 find packages -name "*.pkg.tar.zst" -exec cp {} dist/ \;
-repo-add dist/custom.db.tar.gz dist/*.pkg.tar.zst
+repo-add dist/tsuki.db.tar.gz dist/*.pkg.tar.zst
