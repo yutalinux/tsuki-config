@@ -49,7 +49,6 @@ case "$1" in
     ;;
   build)
     build_packages
-    create_repo
     ;;
   *)
     echo "使用法: $0 {build|clean}"

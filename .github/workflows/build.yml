@@ -28,6 +28,10 @@ jobs:
       - name: Sign Packages
         run: |
           echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --detach-sign --pinentry-mode loopback --passphrase-fd 0 --sign dist/*.pkg.tar.zst
+      - name: Create Repo
+        run: |
+          echo "リポジトリを作成しています"
+          repo-add "$repo_db" "$dist_dir"/*.pkg.tar.zst.sig || { echo "リポジトリ作成に失敗しました"; exit 1; }
       - name: Upload static files
         id: deployment
         uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
