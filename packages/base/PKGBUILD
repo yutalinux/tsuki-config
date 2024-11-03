@@ -1,0 +1,11 @@
+pkgname=tsuki-base-config
+pkgver=1.0
+pkgrel=1
+pkgdesc=""
+arch=('x86_64')
+license=('MIT')
+depends=('base' 'linux' 'grub' 'efibootmgr' 'sudo' 'networkmanager' 'dhcpcd')
+
+package() {
+  echo
+}
