@@ -5,8 +5,8 @@ pkgdesc=""
 arch=('x86_64')
 license=('MIT')
 depends=(
-  'reflector' 'noto-fonts' 'noto-fonts-cjk'
-  'fcitx5' 'fcitx5-configtool' 'fcitx5-gtk' 'fcitx5-qt'
+  'arch-install-scripts' 'sudo' 'jq' 'virtualbox-guest-utils'
+  'reflector' 'gptfdisk' 'dosfstools' 'e2fsprogs' 'parted'
 )
 install=("live.install")
 

@@ -6,7 +6,7 @@ arch=('x86_64')
 license=('MIT')
 depends=(
   'reflector' 'noto-fonts' 'noto-fonts-cjk'
-  'fcitx5' 'fcitx5-configtool' 'fcitx5-gtk' 'fcitx5-qt'
+  'fcitx5' 'fcitx5-configtool' 'fcitx5-gtk' 'fcitx5-qt' 'fcitx5-mozc'
 )
 install=("jp-config.install")
 
