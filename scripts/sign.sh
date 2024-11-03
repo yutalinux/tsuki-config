@@ -1,1 +1,1 @@
-gpg --detach-sign --pinentry-mode loopback --passphrase --passphrase-fd 0 --sign dist/*.pkg.tar.zst
+gpg --detach-sign --pinentry-mode loopback --passphrase-fd 0 "$1"

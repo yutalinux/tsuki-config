@@ -1,4 +1,4 @@
-name: Build Packages
+name: Deploy Packages
 
 on:
   push:
@@ -22,20 +22,18 @@ jobs:
           sudo chown -R builder:builder $GITHUB_WORKSPACE
       - name: Build Packages
         run: |
-          su builder -c "./build.sh clean"
-          su builder -c "./build.sh build"
+          su builder -c "./scripts/build.sh"
       - name: Import GPG key
         run: |
           echo "${{ secrets.GPG_SECRET_KEY }}" | gpg --batch --import
       - name: Sign Packages
         run: |
           for file in dist/*.pkg.tar.zst; do
-            echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --detach-sign --pinentry-mode loopback --passphrase-fd 0 "$file"
+            echo "${{ secrets.GPG_PASSPHRASE }}" | ./scripts/sign.sh $file
           done
       - name: Create Repo
         run: |
-          echo "リポジトリを作成しています"
-          repo-add dist/tsuki.db.tar.gz --sign dist/*.pkg.tar.zst || { echo "リポジトリ作成に失敗しました"; exit 1; }
+          ./scripts/create-repo.sh
       - name: Upload static files
         id: deployment
         uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
