@@ -1,0 +1,168 @@
+#!/bin/bash
+set -e
+
+MOUNT_POINT="/mnt"
+BASE_PACKAGES="base linux grub efibootmgr networkmanager dhcpcd reflector mkinitcpio"
+
+error() {
+  echo "Error: $1"
+  exit 1
+}
+
+load_config() {
+  CONFIG_PATH=$1
+
+  # if [ ! -f $CONFIG_PATH ]  || [ ! -r $CONFIG_PATH ]; then
+    # error "Configuration file not found or failed to load."
+  # fi
+
+  # export CONFIG=$(cat $CONFIG_PATH)
+  read -s -p "Root ユーザーのパスワードを入力してください" ROOT_PASSWORD
+  if [[ -z "$ROOT_PASSWORD" ]]; then
+    exit 1
+  fi
+
+  read -p "一般ユーザーの名前を入力してください" USER_NAME
+  if [[ -z "$USER_NAME" ]]; then
+    exit 1
+  fi
+
+  read -s -p "一般 ユーザー ($USER_NAME) のパスワードを入力してください" USER_PASSWORD
+  if [[ -z "$USER_PASSWORD" ]]; then
+    exit 1
+  fi
+
+  export DISK="/dev/sda"
+  export HOSTNAME="tsuki"
+  export MIRROR_COUNTRY="Japan"
+  export KEYMAP="jp106"
+  export TIMEZONE="Asia/Tokyo"
+  export MAIN_LOCALE="ja_JP.UTF-8"
+  export LOCALES="en_US.UTF-8 ja_JP.UTF-8"
+}
+
+umount_partition() {
+  if mountpoint -q $1; then
+    umount $1
+  fi
+}
+
+setup_partition() {
+  umount_partition ${DISK}1
+  umount_partition ${DISK}2
+  umount_partition ${DISK}3
+
+  sgdisk -Z $DISK
+  parted $DISK mklabel gpt
+
+  sgdisk -n 1:0:+512M -t 1:ef00 -c 1:"EFI System" $DISK
+  sgdisk -n 2:0:+512M -t 2:8300 -c 2:"Boot partition" $DISK
+  sgdisk -n 3:0: -t 3:8300 -c 3:"Root partition" $DISK
+
+  yes y | mkfs.vfat -F32 ${DISK}1
+  yes y | mkfs.ext4 ${DISK}2
+  yes y | mkfs.ext4 ${DISK}3
+
+  mount --mkdir ${DISK}3 $MOUNT_POINT
+  mount --mkdir ${DISK}2 $MOUNT_POINT/boot
+  mount --mkdir ${DISK}1 $MOUNT_POINT/boot/efi
+}
+
+install() {
+  timedatectl set-ntp true
+
+  pacman -Syy
+  pacstrap $MOUNT_POINT $BASE_PACKAGES
+  genfstab -U $MOUNT_POINT >> $MOUNT_POINT/etc/fstab
+
+  mkdir -p $MOUNT_POINT/installer
+  cp /usr/bin/install-tsuki-linux $MOUNT_POINT/installer
+
+  env CHROOT="true" ROOT_PASSWORD="$ROOT_PASSWORD" \
+    USER_NAME="$USER_NAME" USER_PASSWORD="$USER_PASSWORD" \
+    arch-chroot $MOUNT_POINT bash /installer/install-tsuki-linux
+
+  rm -rf $MOUNT_POINT/installer
+}
+
+get_password() {
+    read -s -p "$prompt " password
+    if [[ -n "$password" ]]; then
+      break
+    else
+      exit 1
+    fi
+}
+
+install_system() {
+  # パッケージリストのアップデート
+  pacman -Syy
+
+  # キーリングの初期化
+  pacman-key --init
+  pacman-key --populate archlinux
+
+  # 最速のミラーを取得してmirrorlistを更新
+  reflector --country $MIRROR_COUNTRY --protocol https --latest 5 --sort rate --save /etc/pacman.d/mirrorlist]
+
+  # パッケージのインストール
+  pacman -S --noconfirm $BASE_PACKAGES
+
+  # 言語を設定
+  echo "LANG=$MAIN_LOCALE" > /etc/locale.conf
+
+  # キーボードを設定
+  echo "KEYMAP=$KEYMAP" > /etc/vconsole.conf
+  
+  # タイムゾーンを設定
+  ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
+
+  # ホストネームの設定
+  echo $HOSTNAME > /etc/hostname
+
+  # rootパスワードを設定
+  echo $ROOT_PASSWORD | passwd --stdin
+
+  # 一般ユーザーの作成
+  useradd -m -g wheel -s /bin/bash -m $USER_NAME
+  echo $USER_PASSWORD | passwd --stdin $USER_NAME
+
+  # grubをインストール
+  grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --boot-directory=/boot/efi/EFI --recheck
+  grub-mkconfig -o /boot/efi/EFI/grub/grub.cfg
+
+  # ネットワークの設定
+  systemctl enable networkmanager
+
+  # sudoers の設定
+  TEMP_FILE=$(mktemp) |
+  cat /etc/sudoers > "$TEMP_FILE" 
+
+  if ! grep -q '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' "$TEMP_FILE"; then
+    echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> "$TEMP_FILE"
+  fi
+
+  visudo -c -f "$TEMP_FILE"
+  visudo -f "$TEMP_FILE"
+
+  rm "$TEMP_FILE"
+
+  # initramfs イメージの作成
+  mkinitcpio -p linux
+}
+
+if [ "$CHROOT" = "true" ]; then
+  install_system
+fi
+
+read -p "インストールしますか? (y/n): " answer
+
+if [[ "$answer" != "y" && "$answer" != "Y" ]]; then
+  echo "キャンセルしました."
+  exit 1
+fi
+
+load_config
+setup_partition
+install
+

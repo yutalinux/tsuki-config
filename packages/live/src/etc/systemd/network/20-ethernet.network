@@ -1,0 +1,10 @@
+[Match]
+Name=en*
+Name=eth*
+
+[Link]
+RequiredForOnline=routable
+
+[Network]
+DHCP=yes
+MulticastDNS=yes

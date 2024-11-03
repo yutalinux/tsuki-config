@@ -1,0 +1,18 @@
+pkgname=tsuki-live
+pkgver=1.0
+pkgrel=1
+pkgdesc=""
+arch=('x86_64')
+license=('MIT')
+depends=(
+  'reflector' 'noto-fonts' 'noto-fonts-cjk'
+  'fcitx5' 'fcitx5-configtool' 'fcitx5-gtk' 'fcitx5-qt'
+)
+install=("live.install")
+
+package() {
+  install -dm755 "$pkgdir/etc"
+  install -dm644 "$pkgdir/usr"
+  cp -r "$srcdir/etc" "$pkgdir/"
+  cp -r "$srcdir/usr" "$pkgdir/"
+}
