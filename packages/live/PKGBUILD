@@ -8,7 +8,7 @@ depends=(
   'arch-install-scripts' 'sudo' 'jq' 'virtualbox-guest-utils'
   'reflector' 'gptfdisk' 'dosfstools' 'e2fsprogs' 'parted'
 )
-install=("live.install")
+install="./live.install"
 
 package() {
   install -dm755 "$pkgdir/etc"

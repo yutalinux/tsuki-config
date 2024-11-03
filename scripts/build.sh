@@ -1,3 +1,5 @@
+dist_dir=dist
+
 for pkgbuild in packages/*/PKGBUILD; do
   echo "ビルド中: $pkgbuild"
 
