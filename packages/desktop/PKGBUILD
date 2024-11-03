@@ -10,7 +10,7 @@ sha256sums=('SKIP')
 
 package() {
   install -dm755 "$pkgdir/etc"
-  install -dm644 "$pkgdir/usr"
-  cp -r "$srcdir/yutalinux-tsuki-desktop-config-*"/* "$pkgdir/etc/"
-  cp -r "$srcdir/yutalinux-tsuki-desktop-config-*"/* "$pkgdir/usr/share/"
+  install -dm644 "$pkgdir/usr/share"
+  cp -r $srcdir/yutalinux-tsuki-desktop-config-*/* "$pkgdir/etc/"
+  cp -r $srcdir/yutalinux-tsuki-desktop-config-*/* "$pkgdir/usr/share/"
 }

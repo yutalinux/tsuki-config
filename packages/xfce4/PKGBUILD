@@ -10,5 +10,5 @@ sha256sums=('SKIP')
 
 package() {
   install -dm755 "$pkgdir/etc"
-  cp -r "$srcdir/etc" "$pkgdir/"
+  cp -r $srcdir/yutalinux-tsuki-xfce4-config-*/* "$pkgdir/etc"
 }
