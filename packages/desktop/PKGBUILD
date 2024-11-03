@@ -1,14 +1,14 @@
-pkgname=tsuki-xfce4
+pkgname=tsuki-desktop-config
 pkgver=1.0
 pkgrel=1
 pkgdesc=""
 arch=('x86_64')
 license=('MIT')
-depends=('xfconf' 'xfwm4')
-source=()
-md5sums=()
+depends=('base')
 
 package() {
   install -dm755 "$pkgdir/etc"
+  install -dm644 "$pkgdir/usr"
   cp -r "$srcdir/etc" "$pkgdir/"
+  cp -r "$srcdir/usr" "$pkgdir/"
 }

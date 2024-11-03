@@ -1,4 +1,4 @@
-pkgname=tsuki-jp
+pkgname=tsuki-jp-config
 pkgver=1.0
 pkgrel=1
 pkgdesc=""
@@ -8,6 +8,7 @@ depends=(
   'reflector' 'noto-fonts' 'noto-fonts-cjk'
   'fcitx5' 'fcitx5-configtool' 'fcitx5-gtk' 'fcitx5-qt'
 )
+install=("jp-config.install")
 
 package() {
   install -dm755 "$pkgdir/etc"
