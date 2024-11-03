@@ -1,0 +1,1 @@
+cp pubkey.gpg dist

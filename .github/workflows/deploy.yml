@@ -34,6 +34,9 @@ jobs:
       - name: Create Repo
         run: |
           ./scripts/create-repo.sh
+      - name: Copy Public Key
+        run: |
+          ./scripts/copy-pubkey.sh
       - name: Upload static files
         id: deployment
         uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
