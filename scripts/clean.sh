@@ -1,2 +1,2 @@
 echo "クリーンアップしています"
-rm -rf packages/*/pkg packages/*/*.pkg.tar.zst "dist"
+rm -rf packages/*/pkg packages/*/src packages/*/*.pkg.tar.zst "dist"

@@ -9,6 +9,8 @@ depends=(
   'reflector' 'gptfdisk' 'dosfstools' 'e2fsprogs' 'parted'
 )
 install="./live.install"
+source=("https://github.com/yutalinux/tsuki-live/tarball/main")
+sha256sums=('SKIP')
 
 package() {
   install -dm755 "$pkgdir/etc"

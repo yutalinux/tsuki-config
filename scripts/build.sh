@@ -19,6 +19,7 @@ for pkgbuild in packages/*/PKGBUILD; do
     (
       cd "$pkg_dir" || { echo "ディレクトリ移動に失敗しました"; exit 1; }
       makepkg -sf --syncdeps --noconfirm --needed || { echo "makepkgに失敗しました"; exit 1; }
+      updpkgsums
       cp ./"$package_filename" "../../$dist_dir/" || { echo "パッケージコピーに失敗しました"; exit 1; }
     )
     echo "パッケージ $package_filename をビルドしました"

@@ -5,6 +5,8 @@ pkgdesc=""
 arch=('x86_64')
 license=('MIT')
 depends=('xfconf' 'xfwm4')
+source=("https://github.com/yutalinux/tsuki-xfce4-config/tarball/main")
+sha256sums=('SKIP')
 
 package() {
   install -dm755 "$pkgdir/etc"
