@@ -15,6 +15,6 @@ sha256sums=('SKIP')
 package() {
   install -dm755 "$pkgdir/etc"
   install -dm644 "$pkgdir/usr/share"
-  cp -r $srcdir/yutalinux-tsuki-live-*/* "$pkgdir/etc"
-  cp -r $srcdir/yutalinux-tsuki-live-*/* "$pkgdir/usr/share"
+  cp -r $srcdir/yutalinux-tsuki-live-*/etc "$pkgdir/etc"
+  cp -r $srcdir/yutalinux-tsuki-live-*/usr/share "$pkgdir/usr/share"
 }

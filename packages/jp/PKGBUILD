@@ -14,5 +14,5 @@ sha256sums=('SKIP')
 
 package() {
   install -dm755 "$pkgdir/etc"
-  cp -r $srcdir/yutalinux-tsuki-jp-config-*/* "$pkgdir/etc"
+  cp -r $srcdir/yutalinux-tsuki-jp-config-*/etc "$pkgdir/etc"
 }
