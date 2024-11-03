@@ -1,2 +1,2 @@
 echo "リポジトリを作成しています"
-repo-add "$repo_db" "$dist_dir"/*.pkg.tar.zst
+repo-add "tsuki.db.tar.gz" "dist"/*.pkg.tar.zst
